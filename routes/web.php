@@ -29,16 +29,17 @@ Route::get('/admin', function () {
 
 
 
+Route::middleware('auth')->group(function () {
+    Route::get('/libro', [LibroController::class, 'index'])->name('libro.index');
+    Route::get('/libro/create', [LibroController::class, 'create'])->name('libro.create');
+    Route::post('/libro/create', [LibroController::class, 'create'])->name('libro.create');
 
-Route::get('/libro', [LibroController::class, 'index'])->name('libro.index');
-Route::get('/libro/create', [LibroController::class, 'create'])->name('libro.create');
-Route::post('/libro/create', [LibroController::class, 'create'])->name('libro.create');
+    Route::get('/libro/edit/{i}', [LibroController::class, 'edit'])->name('libro.edit');
+    Route::post('/libro/edit', [LibroController::class, 'edit'])->name('libro.edit');
 
-Route::get('/libro/edit/{i}', [LibroController::class, 'edit'])->name('libro.edit');
-Route::post('/libro/edit', [LibroController::class, 'edit'])->name('libro.edit');
-
-Route::get('/libro/show/{i}', [LibroController::class, 'show'])->name('libro.show');
+    Route::get('/libro/show/{i}', [LibroController::class, 'show'])->name('libro.show');
 
 
-Route::get('/libro/destroy/{i}', [LibroController::class, 'destroy'])->name('libro.destroy');
-Route::post('/libro/destroy', [LibroController::class, 'destroy'])->name('libro.destroy');
+    Route::get('/libro/destroy/{i}', [LibroController::class, 'destroy'])->name('libro.destroy');
+    Route::post('/libro/destroy', [LibroController::class, 'destroy'])->name('libro.destroy');
+});
