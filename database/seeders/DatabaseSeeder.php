@@ -5,12 +5,12 @@ namespace Database\Seeders;
 use App\Models\User;
 use App\Models\Usuario;
 use App\Models\Libro;
+use App\Models\Tarea;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-
 
 use Illuminate\Support\Facades\Hash;
 
@@ -43,10 +43,32 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('2daw.pass'),
         ]);
 
+        User::factory()->create([
+            'name' => 'Pepito',
+            'email' => 'profesor@gmail.com',
+            'password' => Hash::make('0000'),
+        ]);
+
+        User::factory()->create([
+            'name' => 'Juanita',
+            'email' => 'estudiante@gmail.com',
+            'password' => Hash::make('0000'),
+        ]);
+
+
         // $usuario = new Usuario();
         // $usuario->nombre = 'Maria';
         // $usuario->email = 'maria@gmail.com';
         // $usuario->save();
+
+
+        $tarea = new Tarea();
+        $tarea->titulo = 'Actividad 1';
+        $tarea->descripcion = 'Esto seria la actividad 1';
+        $tarea->asignatura = 'Lengua';
+        $tarea->fecha_entrega = '23/02/2026';
+        $tarea->profesor_id = '4';
+        $tarea->save();
 
 
         $libro = new Libro();
@@ -289,19 +311,38 @@ class DatabaseSeeder extends Seeder
         $libro->descripcion = 'El paso del tiempo contado desde el olvido.';
         $libro->save();
 
-
+        //ROLES
         $admin = Role::create(['name' => 'admin']);
         $editor = Role::create(['name' => 'editor']);
 
+        $profesor = Role::create(['name' => 'profesor']);
+        $estudiante = Role::create(['name' => 'estudiante']);
+
+        //PERMISOS
         $createPost = Permission::create(['name' => 'create post']);
         $editPost = Permission::create(['name' => 'edit post']);
         $deletePost = Permission::create(['name' => 'delete post']);
 
+        $createTarea = Permission::create(['name' => 'create tarea']);
+        $editTarea = Permission::create(['name' => 'edit tarea']);
+        $deleteTarea = Permission::create(['name' => 'delete tarea']);
+
         $admin->givePermissionTo($createPost, $editPost, $deletePost);
         $editor->givePermissionTo($editPost);
+
+        $profesor->givePermissionTo($createTarea, $editTarea, $deleteTarea);
+
+        $estudiante->givePermissionTo();
+
 
 
         $user = User::find(2);
         $user->assignRole('admin');
+
+        $userprofesor = User::find(4);
+        $userprofesor->assignRole('profesor');
+
+        $userestudiante = User::find(5);
+        $userestudiante->assignRole('estudiante');
     }
 }

@@ -123,7 +123,6 @@ class UsuarioController extends Controller
 
             return view('usuarios.create', ['usuario' => $usuario, 'datos' => $datos, 'disabled' => $disabled, 'oper' => 'destroy']);
         }
-
     }
 
 
