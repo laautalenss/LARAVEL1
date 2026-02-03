@@ -6,15 +6,124 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Route;
 
-use App\Models\Usuario;
+use App\Models\User;
 
 class UsuarioController extends Controller
 {
-    
-    function show($id)
+    public function index()
     {
-        $url = route('usuario.show', ['id' => 5]);
-        return "Hola listado 11" . $url;
+        $usuarios = User::paginate(10);
+        return view('usuarios.index', ['usuarios' => $usuarios]);
+    }
+
+    public function create(Request $request)
+    {
+        $data = ['exito' => ''];
+
+        if ($request->isMethod('post')) {
+
+            $validated = $request->validate([
+                'name'      => 'required|string|max:255',
+                'email'       => 'required|string|max:255'
+            ]);
+
+            $usuario = new User();
+
+            $usuario->name      = $request->input('nombre');;
+            $usuario->email       = $request->input('email');;
+            $usuario->save();
+
+            $data['exito'] = 'Operación realizada correctamente';
+        }
+
+        $usuario = new User();
+
+
+        return view('usuarios.create', ['datos' => $data, 'usuario' => $usuario, 'disabled' => '', 'oper' => 'create']);
+    }
+
+    public function show(string $id)
+    {
+
+        $datos = ['exito' => ''];
+        $usuario = User::find($id);
+
+        return view('usuarios.create', ['usuario' => $usuario, 'datos' => $datos, 'disabled' => 'disabled', 'oper' => 'show']);
+    }
+
+    public function edit(Request $request, string $id = '')
+    {
+        if ($request->isMethod('post')) {
+
+            $validated = $request->validate([
+                'name'      => 'required|string|max:255',
+                'email'       => 'required|string|max:255'
+            ]);
+
+            /*
+            $datos_save = [];
+            
+            $datos_save['name']       = $request->input('name');;
+            $datos_save['email']        = $request->input('email');;
+
+
+            User::where('id',$request->input('id'))->update($datos_save);
+
+            */
+
+            $usuario = User::find($request->input('id'));
+
+
+            $usuario->name      = $request->input('name');;
+            $usuario->email       = $request->input('email');;
+
+
+            $usuario->save();
+
+            $datos['exito'] = 'Operación realiza correctamente';
+
+            $disabled = 'disabled';
+        } else {
+            $datos = ['exito' => ''];
+            $usuario = User::find($id);
+            $disabled = '';
+        }
+
+        return view('usuarios.create', ['usuario' => $usuario, 'datos' => $datos, 'disabled' => $disabled, 'oper' => 'edit']);
+    }
+
+    public function destroy(Request $request, string $id = '')
+    {
+        if ($request->isMethod('post')) {
+
+            /*
+            $datos_save = [];
+            
+            $datos_save['titulo']       = $request->input('titulo');;
+            $datos_save['autor']        = $request->input('autor');;
+            $datos_save['anho']         = $request->input('anho');;
+            $datos_save['genero']       = $request->input('genero');;
+            $datos_save['descripcion']  = $request->input('descripcion');
+
+
+            Libro::where('id',$request->input('id'))->update($datos_save);
+
+            */
+
+            $usuario = User::find($request->input('id'));
+
+
+            $usuario->delete();
+
+            return redirect()->route('usuarios.index');
+        } else {
+            $datos = ['exito' => ''];
+            $usuario = User::find($id);
+            $disabled = 'disabled';
+
+            return view('usuarios.create', ['usuario' => $usuario, 'datos' => $datos, 'disabled' => $disabled, 'oper' => 'destroy']);
+        }
+
     }
 
 
@@ -23,10 +132,8 @@ class UsuarioController extends Controller
      */
     function store(Request $request)
     {
-        $usuario = new Usuario();
+        $usuario = new User();
 
-        $usuario->create(['nombre'=>'Andrés', 'email' => 'andres_calamaro@gmail.com']);
+        $usuario->create(['name' => 'Andrés', 'email' => 'andres_calamaro@gmail.com']);
     }
-
-
 }

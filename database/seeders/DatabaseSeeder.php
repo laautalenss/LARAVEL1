@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Usuario;
 use App\Models\Libro;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -41,6 +42,12 @@ class DatabaseSeeder extends Seeder
             'email' => 'juan_curbelo@cifpzonzamas.es',
             'password' => Hash::make('2daw.pass'),
         ]);
+
+        // $usuario = new Usuario();
+        // $usuario->nombre = 'Maria';
+        // $usuario->email = 'maria@gmail.com';
+        // $usuario->save();
+
 
         $libro = new Libro();
         $libro->titulo = 'El eco del silencio';

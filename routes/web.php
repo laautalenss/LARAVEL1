@@ -21,7 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 Route::get('/admin', function () {
     return view('admin.dashboard');
@@ -39,7 +39,19 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/libro/show/{i}', [LibroController::class, 'show'])->name('libro.show');
 
-
     Route::get('/libro/destroy/{i}', [LibroController::class, 'destroy'])->name('libro.destroy');
     Route::post('/libro/destroy', [LibroController::class, 'destroy'])->name('libro.destroy');
+
+    //RUTAS DE LAS VISTAS DE USUARIO
+    Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+    Route::get('/usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
+    Route::post('/usuarios/create', [UsuarioController::class, 'create'])->name('usuarios.create');
+
+    Route::get('/usuarios/edit/{i}', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+    Route::post('/usuarios/edit', [UsuarioController::class, 'edit'])->name('usuarios.edit');
+
+    Route::get('/usuarios/show/{i}', [UsuarioController::class, 'show'])->name('usuarios.show');
+
+    Route::get('/usuarios/destroy/{i}', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
+    Route::post('/usuarios/destroy', [UsuarioController::class, 'destroy'])->name('usuarios.destroy');
 });
